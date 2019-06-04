@@ -14,7 +14,7 @@ def image_noise(noise, imagem):
     return new image;
 
 
-def image_filter(filter, image):
+def image_filter(imgfilter, image):
     ''' Os seguintes filtros deverão ser implementados:
         - mediana
         - gaussiano
