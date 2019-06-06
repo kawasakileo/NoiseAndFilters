@@ -30,7 +30,19 @@ def image_noise(noise, image):
                 new_image[random][random_j] = 0
             else:
                 new_image[random][random_j] = 255
-                
+    
+    if noise == 'gaussian':
+        valor = 0
+        gama = 50
+        random = np.random.randn(len(new_image),len(new_image))
+        for i in range(0, len(new_image)):
+            aux = new_image[i]
+            for j in range(0, len(aux)):
+                valor = aux[j] + (random[i][j] * gama)
+                aux[j] = valor
+        
+    Image.fromarray(new_image)
+    
     return new_image
 
 def imagem_mediaD4(i, j, imagem):
@@ -84,23 +96,28 @@ def image_filter(imgfilter, image):
         imagem_mediaD4(i, j, image)
     if imgfilter == 'mean3_d8':
         imagem_mediaD8(i, j, image)
+        
     return new_image;
 
 mean3_d4 = image_filter('mean3_d4', img_array)
 mean3_d8 = image_filter('mean3_d8', img_array)
 noise_white = image_noise('white', img)
 noise_saltpepper = image_noise('salt_pepper', img)
+noise_gaussian = image_noise('gaussian', img)
 
-plt.figure(figsize = (13, 13))
-plt.subplot(221)
+plt.figure(figsize = (15, 15))
+plt.subplot(231)
 plt.imshow(mean3_d4)
 plt.title('Mean 3 - D4')
-plt.subplot(222)
+plt.subplot(232)
 plt.imshow(mean3_d8)
 plt.title('Mean 3 - D8')
-plt.subplot(223)
+plt.subplot(234)
 plt.imshow(noise_white)
 plt.title('White Noise')
-plt.subplot(224)
+plt.subplot(235)
 plt.imshow(noise_saltpepper)
 plt.title('Salt and Pepper Noise')
+plt.subplot(236)
+plt.imshow(noise_gaussian)
+plt.title('Gaussian Noise')
