@@ -6,6 +6,9 @@ import numpy as np
 
 img = Image.open('images/Lenna.png').convert('L')
 img_array = array(img)
+img_array1 = array(img)  # noise
+img_array2 = array(img)  # noise
+img_array3 = array(img)  # noise
 img_arrayalt = array(img)
 
 def image_noise(noise, image):
@@ -14,40 +17,40 @@ def image_noise(noise, image):
         - white
         - gaussian
     '''
-    new_image = array(image)
+    new_image = image
     if noise == 'white':
         for i in range(len(new_image)):
-            random = randint(0, (len(new_image) -1))
-            random_j = randint(0, (len(new_image[i]) -1))
-            new_image[random][random_j] = 255
+            for j in range(len(new_image[i])):
+                random = randint(0, (len(new_image) -1))
+                random_j = randint(0, (len(new_image[i]) -1))
+                new_image[random][random_j] = 255
             
     if noise == 'salt_pepper':
         for i in range(len(new_image)):
-            random = randint(0, (len(new_image) -1))
-            random_j = randint(0, (len(new_image[i]) -1)) 
-            cor = randint(0, 2)
-            if cor == 0:
-                new_image[random][random_j] = 0
-            else:
-                new_image[random][random_j] = 255
+            for j in range(len(new_image)):
+                random = randint(0, (len(new_image) -1))
+                random_j = randint(0, (len(new_image[i]) -1)) 
+                cor = randint(0, 2)
+                if cor == 0:
+                    new_image[random][random_j] = 0
+                else:
+                    new_image[random][random_j] = 255
     
     if noise == 'gaussian':
         valor = 0
         gama = 50
-        random = np.random.randn(len(new_image),len(new_image))
+        random = np.random.randn(len(new_image), len(new_image))
         for i in range(0, len(new_image)):
             aux = new_image[i]
             for j in range(0, len(aux)):
                 valor = aux[j] + (random[i][j] * gama)
                 aux[j] = valor
-        
-    Image.fromarray(new_image)
     
     return new_image
 
 ##############################################################################
 
-def imagem_media3(i,j,imagem):
+def imagem_media3(i, j, imagem):
     leste = imagem[i+1][j]
     oeste = imagem[i-1][j]
     norte = imagem[i][j-1]
@@ -80,8 +83,18 @@ def imagem_media5(i, j, imagem):
     noroeste5 = imagem[i-2][j-2]
     sudeste5 = imagem[i+2][j+2]
     sudoeste5 = imagem[i-2][j+2]
-    media = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste,leste5,oeste5,norte5,sul5,nordeste5,
-             noroeste5,sudeste5,sudoeste5]
+    nordeste5lado = imagem[i+2][j-1]
+    noroeste5lado = imagem[i-2][j-1]
+    norte5esq = imagem[i-1][j-2]
+    norte5dir = imagem[i+1][j-2]
+    sudeste5lado = imagem[i+2][j+1]
+    sudoeste5lado = imagem[i-2][j-1]
+    sul5esq = imagem[i-1][j+2]
+    sul5dir = imagem[i+1][j+2]
+    media = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste,
+             leste5,oeste5,norte5,sul5,nordeste5,noroeste5,sudeste5,sudoeste5,
+             nordeste5lado,noroeste5lado,norte5esq,norte5dir,sudeste5lado,sudoeste5lado,
+             sul5esq,sul5dir]
     imagem = (sum(media) // len(media))
     
     return imagem
@@ -104,6 +117,14 @@ def imagem_media7(i, j, imagem):
     noroeste5 = imagem[i-2][j-2]
     sudeste5 = imagem[i+2][j+2]
     sudoeste5 = imagem[i-2][j+2]
+    nordeste5lado = imagem[i+2][j-1]
+    noroeste5lado = imagem[i-2][j-1]
+    norte5esq = imagem[i-1][j-2]
+    norte5dir = imagem[i+1][j-2]
+    sudeste5lado = imagem[i+2][j+1]
+    sudoeste5lado = imagem[i-2][j-1]
+    sul5esq = imagem[i-1][j+2]
+    sul5dir = imagem[i+1][j+2]
     leste7 = imagem[i+3][j]
     oeste7 = imagem[i-3][j]
     norte7 = imagem[i][j-3]
@@ -112,9 +133,64 @@ def imagem_media7(i, j, imagem):
     noroeste7 = imagem[i-3][j-3]
     sudeste7 = imagem[i+3][j+3]
     sudoeste7 = imagem[i-3][j+3]
-    media = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste,leste5,oeste5,norte5,sul5,
-             nordeste5,noroeste5,sudeste5,sudoeste5,leste7,oeste7,norte7,sul7,nordeste7,noroeste7,sudeste7,sudoeste7]
+    leste7cima = imagem[i+3][j-1]
+    leste7baixo = imagem[i+3][j+1]
+    oeste7cima = imagem[i-3][j-1]
+    oeste7baixo = imagem[i-3][j+1]
+    nordeste7lado = imagem[i+3][j-2]
+    sudeste7lado = imagem[i+3][j+2]
+    noroeste7lado = imagem[i-3][j-2]
+    sudoeste7lado = imagem[i-3][j+2]
+    norte7dir1 = imagem[i+1][j-3]
+    norte7dir2 = imagem[i+2][j-3]
+    norte7esq1 = imagem[i-1][j-3]
+    norte7esq2 = imagem[i-2][j-3]
+    sul7dir1 = imagem[i+1][j+3]
+    sul7dir2 = imagem[i+2][j+3]
+    sul7esq1 = imagem[i-1][j+3]
+    sul7esq2 = imagem[i-2][j+3]
+    media = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste,
+             leste5,oeste5,norte5,sul5,nordeste5,noroeste5,sudeste5,sudoeste5,
+             nordeste5lado,noroeste5lado,norte5esq,norte5dir,sudeste5lado,sudoeste5lado,
+             sul5esq,sul5dir,leste7,oeste7,norte7,sul7,nordeste7,noroeste7,sudeste7,
+             sudoeste7,leste7cima,leste7baixo,oeste7cima,oeste7baixo,nordeste7lado,
+             sudeste7lado,noroeste7lado,sudoeste7lado,norte7dir1,norte7dir2,
+             norte7esq1,norte7esq2,sul7dir1,sul7dir2,sul7esq1,sul7esq2]
     imagem = (sum(media) // len(media))
+    
+    return imagem
+
+def imagem_mediana(imagem):
+    for i in range (len(imagem)-1):
+        for j in range (len(imagem[i])-1):
+            leste = imagem[i+1][j]
+            oeste = imagem[i-1][j]
+            norte = imagem[i][j-1]
+            sul = imagem[i][j+1]
+            centro = imagem[i][j]
+            nordeste = imagem[i+1][j-1]
+            noroeste = imagem[i-1][j-1]
+            sudeste = imagem[i+1][j+1]
+            sudoeste = imagem[i-1][j+1]
+            mediana = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste]
+            mediana.sort()            
+            img_arrayalt[i][j] = mediana[4]
+    imagem = Image.fromarray(img_arrayalt)
+    return imagem
+
+def imagem_gaussian3(i, j, imagem):
+    leste = (imagem[i+1][j] * 0.13)
+    oeste = (imagem[i-1][j] * 0.13)
+    norte = (imagem[i][j-1] * 0.13)
+    sul = (imagem[i][j+1] * 0.13)
+    centro = (imagem[i][j] * 0.2)
+    nordeste = (imagem[i+1][j-1] * 0.06)
+    noroeste = (imagem[i-1][j-1] * 0.06)
+    sudeste = (imagem[i+1][j+1] * 0.06)
+    sudoeste = (imagem[i-1][j+1] * 0.06)
+    media = [leste,oeste,norte,sul,centro,nordeste,noroeste,sudeste,sudoeste]
+    imagem = (sum(media))
+    # imagem = (sum(media) // len(media))
     
     return imagem
 
@@ -127,6 +203,8 @@ def image_filter(imgfilter, image):
         - mean3
         - mean5
         - mean7
+        - prewitt
+        - sobel
     '''
     img_array = array(img)
     img_arrayalt = array(img)
@@ -155,40 +233,62 @@ def image_filter(imgfilter, image):
         
         imagem_media7(i, j, image)
         
+    if imgfilter == 'mediana':
+        new_image = imagem_mediana(image)
+        
+    if imgfilter == 'gaussian3':
+        for i in range(len(img_array) -1):
+            for j in range(len(img_array[i]) -1):
+                img_arrayalt[i][j] = imagem_gaussian3(i,j,img_array)
+        new_image = Image.fromarray(img_arrayalt)
+        
+        imagem_gaussian3(i, j, image)
+        
     return new_image
     
 mean3 = image_filter('mean3', img_array)
 mean5 = image_filter('mean5', img_array)
 mean7 = image_filter('mean7', img_array)
-noise_white = image_noise('white', img)
-noise_saltpepper = image_noise('salt_pepper', img)
-noise_gaussian = image_noise('gaussian', img)
+mediana = image_filter('mediana', img_array)
+gaussian = image_filter('gaussian3', img_array)
+
+image_noise('white', img_array1)
+noise_white = Image.fromarray(img_array1)
+image_noise('salt_pepper', img_array2)
+noise_saltpepper = Image.fromarray(img_array2)
+image_noise('gaussian', img_array3)
+noise_gaussian = Image.fromarray(img_array3)
 
 plt.figure(figsize = (30, 30))
-plt.subplot(231)
-plt.imshow(mean3)
-plt.title('Mean 3')
-plt.subplot(232)
-plt.imshow(mean5)
-plt.title('Mean 5')
-plt.subplot(233)
-plt.imshow(mean7)
-plt.title('Mean 7')
-# plt.subplot(234)
-# plt.hist(array(mean3).ravel())
-# plt.title('mean3 hist')
-# plt.subplot(235)
-# plt.hist(array(mean5).ravel())
-# plt.title('mean5 hist')
-# plt.subplot(236)
-# plt.hist(array(mean7).ravel())
-# plt.title('mean7 hist')
-plt.subplot(234)
+plt.subplot(431)
 plt.imshow(noise_white)
 plt.title('White Noise')
-plt.subplot(235)
+plt.subplot(432)
 plt.imshow(noise_saltpepper)
 plt.title('Salt and Pepper Noise')
-plt.subplot(236)
+plt.subplot(433)
 plt.imshow(noise_gaussian)
 plt.title('Gaussian Noise')
+plt.subplot(434)
+plt.imshow(mean3)
+plt.title('Mean 3')
+plt.subplot(435)
+plt.imshow(mean5)
+plt.title('Mean 5')
+plt.subplot(436)
+plt.imshow(mean7)
+plt.title('Mean 7')
+plt.subplot(437)
+plt.imshow(mediana)
+plt.title('Mediana')
+plt.subplot(438)
+plt.imshow(gaussian)
+plt.title('Gaussian 3')
+plt.subplot(439)
+plt.imshow(img)
+plt.subplot(4,3,10)
+plt.imshow(img)
+plt.subplot(4,3,11)
+plt.imshow(img)
+plt.subplot(4,3,12)
+plt.imshow(img)
