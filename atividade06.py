@@ -224,8 +224,8 @@ def imagem_gaussian5(i, j, imagem):
              leste5,oeste5,norte5,sul5,nordeste5,noroeste5,sudeste5,sudoeste5,
              nordeste5lado,noroeste5lado,norte5esq,norte5dir,sudeste5lado,sudoeste5lado,
              sul5esq,sul5dir]
-    # imagem = (sum(media))
-    imagem = (sum(media) // len(media))
+    imagem = (sum(media))
+    # imagem = (sum(media) // len(media))
     
     return imagem
 
@@ -286,8 +286,8 @@ def imagem_gaussian7(i, j, imagem):
              sudoeste7,leste7cima,leste7baixo,oeste7cima,oeste7baixo,nordeste7lado,
              sudeste7lado,noroeste7lado,sudoeste7lado,norte7dir1,norte7dir2,
              norte7esq1,norte7esq2,sul7dir1,sul7dir2,sul7esq1,sul7esq2]
-    # imagem = (sum(media))
-    imagem = (sum(media) // len(media))
+    imagem = (sum(media))
+    # imagem = (sum(media) // len(media))
     
     return imagem
 
@@ -300,6 +300,8 @@ def image_filter(imgfilter, image):
         - mean3
         - mean5
         - mean7
+        - prewitt
+        - sobel
     '''
     img_array = array(img)
     img_arrayalt = array(img)
@@ -354,6 +356,105 @@ def image_filter(imgfilter, image):
         new_image = Image.fromarray(img_arrayalt)
         
         imagem_gaussian7(i, j, image)
+        
+    if imgfilter == 'prewitt':
+        img_array = array(img)
+        mediax = array(img)
+        img_novo = array(img)
+        lst_vizinhosx = []
+        for i in range (len(img_array)):
+            for j in range (len(img_array[i])):
+                meio = 0
+                try:
+                    lst_vizinhosx.append(img_array[i][j]*0)
+                    lst_vizinhosx.append(img_array[i][j-1]*-1) #esquerda
+                    lst_vizinhosx.append(img_array[i][j+1]*1) #direita
+                    lst_vizinhosx.append(img_array[i-1][j]*0) #cima
+                    lst_vizinhosx.append(img_array[i+1][j]*0) #baixo
+                    lst_vizinhosx.append(img_array[i-1][j-1]*-1) #canto superior esquerdo
+                    lst_vizinhosx.append(img_array[i-1][j+1]*1) #canto superior direito
+                    lst_vizinhosx.append(img_array[i+1][j-1]*-1) #canto inferior esquerdo
+                    lst_vizinhosx.append(img_array[i+1][j+1]*1) #canto inferior direito
+                except:
+                    pass
+                mediax[i][j] = sum(lst_vizinhosx) // len(lst_vizinhosx)
+                del lst_vizinhosx[:]
+                
+        mediay = array(img)
+        lst_vizinhosy = []
+        for i in range (len(img_array)):
+            for j in range (len(img_array[i])):
+                meio = 0
+                try:
+                    lst_vizinhosy.append(img_array[i][j]*0)
+                    lst_vizinhosy.append(img_array[i][j-1]*0) #esquerda
+                    lst_vizinhosy.append(img_array[i][j+1]*0) #direita
+                    lst_vizinhosy.append(img_array[i-1][j]*-1) #cima
+                    lst_vizinhosy.append(img_array[i+1][j]*1) #baixo
+                    lst_vizinhosy.append(img_array[i-1][j-1]*-1) #canto superior esquerdo
+                    lst_vizinhosy.append(img_array[i-1][j+1]*-1) #canto superior direito
+                    lst_vizinhosy.append(img_array[i+1][j-1]*1) #canto inferior esquerdo
+                    lst_vizinhosy.append(img_array[i+1][j+1]*1) #canto inferior direito
+
+                except:
+                    pass
+                mediay[i][j] = sum(lst_vizinhosy) // len(lst_vizinhosy)
+                del lst_vizinhosy[:]
+
+        for i in range (len(img_array)):
+            for j in range (len(img_array[i])):
+                img_novo[i][j] = int(mediay[i][j]) + int(mediax[i][j])
+        
+        new_image = Image.fromarray(img_novo)
+    
+    if imgfilter == 'sobel':
+        img_array = array(img)
+        mediax = array(img)
+        img_novo = array(img)
+        lst_vizinhosx = []
+        for i in range (len(img_array)):
+            for j in range (len(img_array[0])):
+                meio = 0
+                try:
+                    lst_vizinhosx.append(img_array[i][j]*0)
+                    lst_vizinhosx.append(img_array[i][j-1]*-2) #esquerda
+                    lst_vizinhosx.append(img_array[i][j+1]*2) #direita
+                    lst_vizinhosx.append(img_array[i-1][j]*0) #cima
+                    lst_vizinhosx.append(img_array[i+1][j]*0) #baixo
+                    lst_vizinhosx.append(img_array[i-1][j-1]*-1) #canto superior esquerdo
+                    lst_vizinhosx.append(img_array[i-1][j+1]*1) #canto superior direito
+                    lst_vizinhosx.append(img_array[i+1][j-1]*-1) #canto inferior esquerdo
+                    lst_vizinhosx.append(img_array[i+1][j+1]*1) #canto inferior direito
+                except:
+                    pass
+                mediax[i][j] = sum(lst_vizinhosx) // len(lst_vizinhosx)
+                del lst_vizinhosx[:]
+
+        mediay = array(img)
+        lst_vizinhosy = []
+        for i in range (len(img_array)):
+            for j in range (len(img_array[i])):
+                meio = 0
+                try:
+                    lst_vizinhosy.append(img_array[i][j]*0)
+                    lst_vizinhosy.append(img_array[i][j-1]*0) #esquerda
+                    lst_vizinhosy.append(img_array[i][j+1]*0) #direita
+                    lst_vizinhosy.append(img_array[i-1][j]*-2) #cima
+                    lst_vizinhosy.append(img_array[i+1][j]*2) #baixo
+                    lst_vizinhosy.append(img_array[i-1][j-1]*-1) #canto superior esquerdo
+                    lst_vizinhosy.append(img_array[i-1][j+1]*-1) #canto superior direito
+                    lst_vizinhosy.append(img_array[i+1][j-1]*1) #canto inferior esquerdo
+                    lst_vizinhosy.append(img_array[i+1][j+1]*1) #canto inferior direito
+                except:
+                    pass
+                mediay[i][j] = sum(lst_vizinhosy) // len(lst_vizinhosy)
+                del lst_vizinhosy[:]
+
+        for i in range (len(img_array)):
+            for j in range (len(img_array[i])):
+                img_novo[i][j] = int(mediay[i][j]) + int(mediax[i][j])
+    
+        new_image = Image.fromarray(img_novo)
     
     return new_image
     
@@ -364,6 +465,8 @@ mediana = image_filter('mediana', img_array)
 gaussian3 = image_filter('gaussian3', img_array)
 gaussian5 = image_filter('gaussian5', img_array)
 gaussian7 = image_filter('gaussian7', img_array)
+prewitt = image_filter('prewitt', img_array)
+sobel = image_filter('sobel', img_array)
 
 image_noise('white', img_array1)
 noise_white = Image.fromarray(img_array1)
@@ -392,18 +495,20 @@ plt.subplot(436)
 plt.imshow(mean7)
 plt.title('Mean 7')
 plt.subplot(437)
-plt.imshow(mediana)
-plt.title('Mediana')
-plt.subplot(438)
 plt.imshow(gaussian3)
 plt.title('Gaussian 3')
-plt.subplot(439)
+plt.subplot(438)
 plt.imshow(gaussian5)
 plt.title('Gaussian 5')
-plt.subplot(4,3,10)
+plt.subplot(439)
 plt.imshow(gaussian7)
 plt.title('Gaussian 7')
+plt.subplot(4,3,10)
+plt.imshow(mediana)
+plt.title('Mediana')
 plt.subplot(4,3,11)
-plt.imshow(img)
+plt.imshow(prewitt)
+plt.title('Prewitt')
 plt.subplot(4,3,12)
-plt.imshow(img)
+plt.imshow(sobel)
+plt.title('Sobel')
