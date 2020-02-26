@@ -33,7 +33,7 @@ Realça linhas verticais e horizontais mais escuras que o fundo, sem realçar po
 
 Para a implementação deste código fonte foi utilizada a linguagem de programação Python3 junto das bibliotecas Numpy, e Matplotlib. Isso através do AnacondaPrompt.
 
-Numpy doc: [a link] https://docs.scipy.org/doc/numpy/dev/
+Numpy doc: [a link] https://docs.scipy.org/doc/numpy/dev/ <br/>
 Matplotlib doc: [a link] https://matplotlib.org/api/pyplot_api.html
  
 
